@@ -304,6 +304,7 @@ function docCard(k,showUso){
  return `<div class="doc"><span class="doc-code${x.tipo==="pdf"?" pdf":""}">${x.code}</span><div class="doc-main">${showUso?`<span class="doc-meta">${x.uso}</span>`:""}<span class="doc-t">${x.t}</span><span class="doc-d">${x.d}</span><div class="doc-actions">${acts}</div></div></div>`;
 }
 
+const SITE="https://mscale-plataforma.vercel.app/";
 const SK=[
  ["/narrativa-especialista","Monta o seu documento de narrativa: história, virada, crenças e autoridade.","Semana 1"],
  ["/promessa-biografia","Gera 5 versões de promessa e 5 de biografia a partir do [00] Posicionamento.","Semana 1 · Dia 6"],
@@ -702,7 +703,7 @@ function renderVisao(){
    <li><span class="n">4</span><span>Travou em alguma tarefa por mais de 1 dia? <b>Manda no grupo.</b> Não espera o encontro.</span></li>
   </ul>
  </div>
- <a class="doc" href="#materiais" style="text-decoration:none;color:inherit"><span class="doc-code">↗</span><span class="doc-main"><span class="doc-t">Materiais e ferramentas</span><span class="doc-d">Todos os documentos ([00] Posicionamento, [01] Público-alvo, [03] Ofertas, [04] Funil), o Playbook de Conteúdo e as skills de IA num lugar só.</span></span></a>
+ <a class="doc" href="#materiais" style="text-decoration:none;color:inherit"><span class="doc-code">↗</span><span class="doc-main"><span class="doc-t">Materiais e ferramentas</span><span class="doc-d">Todos os documentos ([00] Posicionamento, [01] Público-alvo, [03] Ofertas, [04] Funil), o Playbook de Conteúdo e as skills de IA para baixar e instalar no seu Claude.</span></span></a>
  <p class="foot">Seu progresso fica salvo neste navegador. Abra sempre pelo mesmo aparelho para manter as marcações.</p>
  ${pager(1)}`;
 }
@@ -743,9 +744,20 @@ function renderMateriais(i){
  <div class="docs">${["00","01","03","04"].map(k=>docCard(k,true)).join("")}</div>
  <h2>Playbooks de leitura</h2>
  <div class="docs">${["conteudo","apresentacao"].map(k=>docCard(k,true)).join("")}</div>
- <h2>Skills de IA</h2>
- <p>Digite o comando no Claude e anexe os seus documentos preenchidos. A IA faz o rascunho; você ajusta com a sua voz.</p>
- <div class="skills">${SK.map(s=>`<div class="skill"><code>${s[0]}</code><span>${s[1]}</span><small>${s[2]}</small></div>`).join("")}</div>
+ <h2 id="skills">Skills de IA</h2>
+ <p>Skills são instruções que ensinam o Claude a fazer cada entrega no método MScale. Você instala uma vez e depois é só chamar pelo nome.</p>
+ <div class="card">
+  <h2>Como instalar no seu Claude</h2>
+  <ol class="steps">
+   <li><span class="sn">PASSO 1</span><b>Ative a criação de arquivos</b><span>No claude.ai, vá em Settings → Capabilities e ligue "Code execution and file creation" (ou "Create and edit files"). Sem isso, as skills não aparecem.</span></li>
+   <li><span class="sn">PASSO 2</span><b>Baixe a skill</b><span>Clique em "Baixar skill" no card abaixo. Vem um arquivo .zip. Não descompacte.</span></li>
+   <li><span class="sn">PASSO 3</span><b>Envie para o Claude</b><span>Vá em Customize → Skills, clique no "+", depois em "Create skill" e em "Upload a skill". Escolha o .zip.</span></li>
+   <li><span class="sn">PASSO 4</span><b>Use</b><span>Numa conversa nova, digite o comando (ex.: /promessa-biografia) e anexe os seus documentos preenchidos.</span></li>
+  </ol>
+  <p class="foot">Funciona nos planos Free, Pro, Max, Team e Enterprise. No Team e no Enterprise, o administrador da empresa precisa liberar as skills.</p>
+ </div>
+ <div class="skills">${SK.map(s=>{const slug=s[0].slice(1);return `<div class="skill"><code>${s[0]}</code><span>${s[1]}</span><small>${s[2]}</small><div class="doc-actions"><a class="btn primary" href="${SITE}skills/${slug}.zip" download target="_blank" rel="noopener">Baixar skill</a><button class="btn" type="button" data-cmd="${s[0]}">Copiar comando</button></div></div>`}).join("")}</div>
+ <p class="foot">A IA faz o rascunho; você ajusta com a sua voz. Nada vai para o ar sem você ler em voz alta e reconhecer como seu.</p>
  ${pager(i)}`;
 }
 
@@ -795,6 +807,8 @@ document.addEventListener("change",e=>{
  }
 });
 document.addEventListener("click",e=>{
+ const cmd=e.target.dataset&&e.target.dataset.cmd;
+ if(cmd){const b=e.target;const done=()=>{b.textContent="Copiado";setTimeout(()=>b.textContent="Copiar comando",1600)};try{navigator.clipboard.writeText(cmd).then(done,()=>{b.textContent=cmd})}catch(err){b.textContent=cmd}return}
  if(e.target.id!=="copyBtn")return;
  const txt=copyText();const msg=document.getElementById("copyMsg");
  const fallback=()=>{msg.innerHTML='Selecione e copie o texto abaixo:<textarea id="copyOut" readonly></textarea>';const t=document.getElementById("copyOut");t.value=txt;t.focus();t.select();};
