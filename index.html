@@ -1,0 +1,814 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MScale Plano de Ação</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap">
+<style>
+[hidden]{display:none!important}
+img{max-width:100%}
+body{margin:0}
+/* Layout: sidebar de navegação estilo Notion à esquerda, página de leitura à direita; no celular, abas no topo. Identidade única: preto, branco, magenta. */
+:root{
+  --bg:#0a0a0b;
+  --surface:#131215;
+  --surface-2:#1c1a1f;
+  --line:#2a2730;
+  --fg:#f7f5f8;
+  --muted:#a29ca8;
+  --magenta:#ff1f8f;
+  --magenta-soft:rgba(255,31,143,.12);
+  --ok:#3ddc97;
+  --font:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--fg)}
+body{font-family:var(--font);font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+a{color:var(--magenta)}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--magenta);outline-offset:2px;border-radius:6px}
+
+.app{display:grid;grid-template-columns:272px minmax(0,1fr);min-height:100vh}
+
+/* Sidebar */
+.side{position:sticky;top:env(safe-area-inset-top,0px);height:100vh;overflow-y:auto;background:var(--surface);border-right:1px solid var(--line);padding:24px 14px;padding-left:max(14px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:22px}
+.brand{display:flex;align-items:center;gap:10px;padding:0 8px}
+.brand-logo{font-weight:900;font-size:20px;letter-spacing:.02em;line-height:1}
+.brand-logo span{color:var(--magenta)}
+.brand-tag{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--bg);background:var(--magenta);padding:3px 7px;border-radius:4px}
+.who{padding:0 8px;display:flex;flex-direction:column;gap:6px}
+.who label{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.who input{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--fg);border-radius:8px;padding:9px 11px;font:600 14px var(--font)}
+.who input::placeholder{color:#6d6773}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav-label{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:0 8px 6px}
+.nav a{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--fg);text-decoration:none;font-weight:500;font-size:14px}
+.nav a:hover{background:var(--surface-2)}
+.nav a.active{background:var(--magenta-soft);color:var(--fg);font-weight:700}
+.nav a.active .nav-ic{background:var(--magenta);color:#fff;border-color:var(--magenta)}
+.nav-ic{flex:none;width:24px;height:24px;border-radius:6px;border:1px solid var(--line);display:grid;place-items:center;font-size:11px;font-weight:800;color:var(--muted)}
+.nav-t{flex:1;min-width:0}
+.nav-pct{font-size:11px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.nav-pct.done{color:var(--ok)}
+.side-prog{margin-top:auto;padding:14px 10px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.side-prog .row{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--muted)}
+.side-prog .row b{color:var(--fg);font-variant-numeric:tabular-nums}
+.bar{height:6px;background:var(--surface-2);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--magenta);border-radius:99px;transition:width .4s ease}
+
+/* Main */
+.main{min-width:0;padding-block:48px 96px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+.page{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+.crumb{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.04em}
+.crumb b{color:var(--magenta)}
+h1{font-size:clamp(30px,5vw,44px);line-height:1.08;font-weight:900;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h1 em{font-style:normal;color:var(--magenta)}
+h2{font-size:20px;font-weight:800;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h3{font-size:16px;font-weight:700;margin:0}
+p{margin:0}
+.lead{font-size:17px;color:#d9d4dd;max-width:62ch}
+
+.goal{border:1px solid var(--magenta);background:var(--magenta-soft);border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:6px}
+.eyebrow{font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--magenta)}
+.goal p{font-size:17px;font-weight:600;line-height:1.5}
+
+.weekhead{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.chip{font-size:12px;font-weight:700;padding:5px 11px;border-radius:99px;border:1px solid var(--line);color:var(--muted);font-variant-numeric:tabular-nums}
+.chip.done{border-color:var(--ok);color:var(--ok)}
+
+/* Tasks */
+.tasks{display:flex;flex-direction:column;gap:10px}
+.task{border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+.task[open]{border-color:#3a3540}
+.task summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;padding:16px 18px}
+.task summary::-webkit-details-marker{display:none}
+.task summary:hover{background:var(--surface-2)}
+.day{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--magenta);white-space:nowrap;min-width:64px}
+.t-title{font-weight:700;font-size:15px;line-height:1.35}
+.caret{width:22px;height:22px;display:grid;place-items:center;color:var(--muted);transition:transform .2s}
+.task[open] .caret{transform:rotate(90deg);color:var(--magenta)}
+.t-body{padding:4px 18px 20px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:16px}
+.blk{display:flex;flex-direction:column;gap:6px;padding-top:14px}
+.blk-l{font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.blk-l.m{color:var(--magenta)}
+.t-body ol,.t-body ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:7px}
+.t-body li::marker{color:var(--magenta);font-weight:700}
+.t-body b{font-weight:700;color:#fff}
+.tip{background:var(--surface-2);border-left:3px solid var(--magenta);padding:12px 14px;border-radius:0 8px 8px 0;font-size:14px}
+.ai{display:flex;gap:10px;align-items:flex-start;background:var(--bg);border:1px dashed #3a3540;border-radius:10px;padding:12px 14px;font-size:14px;color:#d9d4dd}
+.ai-tag{flex:none;font-size:10px;font-weight:800;letter-spacing:.1em;background:var(--fg);color:var(--bg);padding:3px 7px;border-radius:4px;margin-top:2px}
+.quote{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14px;display:flex;flex-direction:column;gap:4px}
+.quote .q-l{font-size:11px;font-weight:800;color:var(--magenta);letter-spacing:.06em;text-transform:uppercase}
+
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+tr:last-child td{border-bottom:0}
+td b{color:#fff}
+
+.swot{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.swot div{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13.5px;display:flex;flex-direction:column;gap:4px}
+.swot div:nth-child(1){border-top:3px solid var(--magenta)}
+.swot div:nth-child(2){border-top:3px solid var(--fg)}
+.swot div:nth-child(3){border-top:3px solid var(--magenta)}
+.swot div:nth-child(4){border-top:3px solid var(--fg)}
+.swot b{font-size:13px;letter-spacing:.04em}
+
+/* Checklist */
+.card{border:1px solid var(--line);border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:14px;background:var(--surface)}
+.deliv{background:var(--fg);color:var(--bg);border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:6px}
+.deliv .eyebrow{color:var(--magenta)}
+.deliv p{font-weight:600;font-size:15px;line-height:1.55}
+.checks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.checks label{display:flex;gap:12px;align-items:flex-start;padding:9px 8px;border-radius:8px;cursor:pointer;font-weight:500}
+.checks label:hover{background:var(--surface-2)}
+.checks input{appearance:none;flex:none;width:20px;height:20px;border:2px solid #4a4450;border-radius:6px;margin-top:2px;display:grid;place-items:center;cursor:pointer;transition:all .15s}
+.checks input:checked{background:var(--magenta);border-color:var(--magenta)}
+.checks input:checked::after{content:"";width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.checks input:checked+span{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--magenta)}
+
+/* Overview */
+.weeks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.wk{display:flex;flex-direction:column;gap:10px;padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--surface);text-decoration:none;color:var(--fg);transition:border-color .15s,transform .15s}
+.wk:hover{border-color:var(--magenta);transform:translateY(-2px)}
+.wk-n{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--magenta);display:flex;justify-content:space-between}
+.wk-n span{color:var(--muted);font-variant-numeric:tabular-nums}
+.wk h3{font-size:18px;font-weight:800}
+.wk p{font-size:13.5px;color:#cfcad4}
+.rules{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.rules li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;align-items:start}
+.rules .n{width:28px;height:28px;border-radius:8px;background:var(--surface-2);display:grid;place-items:center;font-weight:800;font-size:12px;color:var(--magenta)}
+
+/* Metrics */
+.metric-in{width:100%;min-width:80px;background:var(--bg);border:1px solid var(--line);color:var(--fg);border-radius:6px;padding:6px 8px;font:600 13px var(--font);font-variant-numeric:tabular-nums}
+.metric-in:focus{border-color:var(--magenta);outline:none}
+
+/* Materiais */
+.doc{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:start;border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--bg)}
+.doc-code{flex:none;min-width:46px;height:46px;border-radius:10px;background:var(--magenta);color:#fff;display:grid;place-items:center;font-weight:900;font-size:14px;letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.doc-code.pdf{background:var(--fg);color:var(--bg);font-size:11px}
+.doc-main{min-width:0;display:flex;flex-direction:column;gap:4px}
+.doc-t{font-weight:800;font-size:15px;line-height:1.3}
+.doc-d{font-size:13.5px;color:#cfcad4}
+.doc-meta{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.doc-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 13px;border-radius:8px;font:700 13px var(--font);text-decoration:none;border:1px solid var(--line);color:var(--fg);background:var(--surface-2)}
+.btn:hover{border-color:var(--magenta)}
+.btn.primary{background:var(--magenta);border-color:var(--magenta);color:#fff}
+.btn.primary:hover{filter:brightness(1.1)}
+.docs{display:flex;flex-direction:column;gap:10px}
+.skills{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.skill{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--bg);display:flex;flex-direction:column;gap:4px;min-width:0}
+.skill code{font:700 13px var(--font);color:var(--magenta);word-break:break-word}
+.skill span{font-size:13px;color:#cfcad4}
+.skill small{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.skills{grid-template-columns:minmax(0,1fr)}}
+
+/* Boas-vindas e diagnóstico */
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.steps li{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--bg);display:flex;flex-direction:column;gap:4px;min-width:0}
+.steps .sn{font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--magenta)}
+.steps b{font-size:14.5px}
+.steps span{font-size:13.5px;color:#cfcad4}
+.phases{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.phase{border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--bg);display:flex;flex-direction:column;gap:6px;min-width:0}
+.phase.on{border-color:var(--magenta);background:var(--magenta-soft)}
+.phase .ph-n{font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.phase h3{font-size:19px;font-weight:900}
+.phase p{font-size:13px;color:#cfcad4}
+.phase .ph-goal{font-size:12.5px;font-weight:700;color:var(--fg);margin-top:auto;padding-top:8px;border-top:1px solid var(--line)}
+.q{display:flex;flex-direction:column;gap:10px;padding:16px 0;border-top:1px solid var(--line)}
+.q:first-of-type{border-top:0;padding-top:4px}
+.q-t{font-weight:700;font-size:15px}
+.q-t small{color:var(--magenta);font-weight:800;margin-right:8px;font-variant-numeric:tabular-nums}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{position:relative}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt span{display:block;padding:9px 14px;border:1px solid var(--line);border-radius:99px;font-size:13.5px;font-weight:600;cursor:pointer;background:var(--bg);transition:all .15s}
+.opt span:hover{border-color:#5a5360}
+.opt input:checked+span{background:var(--magenta);border-color:var(--magenta);color:#fff}
+.opt input:focus-visible+span{outline:2px solid var(--magenta);outline-offset:2px}
+.q textarea{width:100%;min-height:84px;resize:vertical;background:var(--bg);border:1px solid var(--line);color:var(--fg);border-radius:10px;padding:10px 12px;font:500 14px/1.5 var(--font)}
+.q textarea:focus{outline:none;border-color:var(--magenta)}
+.result{border-radius:14px;padding:22px;background:var(--fg);color:var(--bg);display:flex;flex-direction:column;gap:10px}
+.result .eyebrow{color:var(--magenta)}
+.result h2{font-size:26px;font-weight:900;color:var(--bg)}
+.result p{font-weight:500;font-size:14.5px}
+.result .btn{background:var(--bg);color:var(--fg);border-color:var(--bg)}
+.result .btn.primary{background:var(--magenta);border-color:var(--magenta);color:#fff}
+.result-acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pend{font-size:13px;color:var(--muted);font-weight:600}
+.trail{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-direction:column;gap:8px;counter-reset:tr}
+.trail li{counter-increment:tr;display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:12px;align-items:center;background:#fff;border:1px solid #e3dfe6;border-radius:10px;padding:12px 14px}
+.trail li::before{content:counter(tr);width:30px;height:30px;border-radius:8px;background:#0a0a0b;color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px}
+.trail .tr-main{min-width:0;display:flex;flex-direction:column;gap:2px}
+.trail .tr-main b{font-size:14.5px;color:#0a0a0b}
+.trail .tr-main span{font-size:13px;color:#4a4450;font-weight:500}
+.trail a.tr-go{font:700 12.5px var(--font);color:#fff;background:#ff1f8f;border-radius:8px;padding:7px 12px;text-decoration:none;white-space:nowrap}
+.trail .tr-kick{font:700 11px var(--font);letter-spacing:.06em;text-transform:uppercase;color:#7a7380;white-space:nowrap}
+@media (max-width:560px){.trail li{grid-template-columns:30px minmax(0,1fr)}.trail a.tr-go,.trail .tr-kick{grid-column:2;justify-self:start}}
+.trail-banner{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;border:1px solid var(--magenta);background:var(--magenta-soft);border-radius:12px;padding:14px 18px}
+.trail-banner b{font-weight:800}
+#copyOut{width:100%;min-height:120px;font:500 12.5px/1.5 var(--font);border-radius:8px;border:1px solid #ccc;padding:8px;color:#111;background:#fff}
+@media (max-width:700px){.phases{grid-template-columns:minmax(0,1fr)}.steps{grid-template-columns:minmax(0,1fr)}}
+
+.pager{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:8px;border-top:1px solid var(--line)}
+.pager a{display:flex;flex-direction:column;gap:2px;padding:12px 16px;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--fg);font-weight:700;font-size:14px;min-width:0}
+.pager a:hover{border-color:var(--magenta)}
+.pager a small{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.pager .next{margin-left:auto;text-align:right}
+
+.foot{font-size:12px;color:var(--muted)}
+
+@media (max-width:860px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .side{position:sticky;top:env(safe-area-inset-top,0px);height:auto;z-index:5;flex-direction:column;gap:12px;padding:14px 0 10px;border-right:0;border-bottom:1px solid var(--line)}
+  .brand,.who{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .who{display:none}
+  .nav{flex-direction:row;overflow-x:auto;gap:6px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));scrollbar-width:none}
+  .nav::-webkit-scrollbar{display:none}
+  .nav-label{display:none}
+  .nav a{flex:none;padding:7px 11px;border:1px solid var(--line)}
+  .nav-pct{display:none}
+  .side-prog{display:none}
+  .main{padding-block:28px 72px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .who-m{display:flex !important}
+}
+.who-m{display:none;flex-direction:column;gap:6px}
+.who-m label{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.who-m input{width:100%;background:var(--surface);border:1px solid var(--line);color:var(--fg);border-radius:8px;padding:9px 11px;font:600 14px var(--font)}
+@media (max-width:560px){
+  .weeks{grid-template-columns:minmax(0,1fr)}
+  .swot{grid-template-columns:minmax(0,1fr)}
+  .task summary{grid-template-columns:minmax(0,1fr) auto;gap:4px 10px}
+  .day{grid-column:1;min-width:0}
+  .t-title{grid-column:1}
+  .caret{grid-column:2;grid-row:1 / span 2}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <div class="brand-logo" id="logo">M<span>.</span>SCALE</div>
+    </div>
+    <div class="who">
+      <label for="nome">Plano de ação de</label>
+      <input id="nome" type="text" placeholder="Seu nome" autocomplete="off">
+    </div>
+    <nav class="nav" id="nav" aria-label="Seções do playbook"></nav>
+    <div class="side-prog">
+      <div class="row"><span>Progresso do mês</span><b id="totPct">0%</b></div>
+      <div class="bar"><i id="totBar" style="width:0%"></i></div>
+    </div>
+  </aside>
+  <main class="main"><div class="page" id="page"></div></main>
+</div>
+
+<script>
+/* Materiais do Drive MScale. tipo "doc" = modelo para fazer cópia; "pdf" = só leitura */
+const D = {
+ "00":{code:"00",t:"[00] Posicionamento",tipo:"doc",id:"10DIwuBy-JJKD-EPbBxnn29gkZvGrskKqqYSh1oFBG9U",
+   d:"Problema que você resolve, sua autoridade, seu cliente (Ponto A e Ponto B), seu mecanismo em 4 etapas, promessa e biografia.",
+   uso:"Semana 1 · Dias 5 e 6", rota:"semana-1"},
+ "01":{code:"01",t:"[01] Público-alvo",tipo:"doc",id:"1nBjeD9wv2khsKhPEj5koKtowgNH6KG7EMJMZ1VhfwIE",
+   d:"Nicho, cliente ideal, personas, desafios, crenças, desejos internos, externos e transformacionais, dor externa e dor real.",
+   uso:"Semana 2 · Dias 7 e 8", rota:"semana-2"},
+ "03":{code:"03",t:"[03] Ofertas",tipo:"doc",id:"1aDZXjp_U6DC2v1qqDOdJUDjE140N-pG-ePaeQkPimgo",
+   d:"Nome da oferta, promessa, tempo, formato, entregáveis, bônus, bônus de call, ancoragem, investimento e condição de fechamento.",
+   uso:"Semana 2 · Dias 11 e 12", rota:"semana-2"},
+ "04":{code:"04",t:"[04] Funil",tipo:"doc",id:"1ftAWgfyXu5krdVDRJG-Eq9TzESNWAxB-oo7iGs5vbWA",
+   d:"Scripts prontos de 1ª Venda (mensagem para a sua lista de contatos) e de Levantada de Mão (stories com palavra-chave).",
+   uso:"Semana 3 · Dias 16 a 18", rota:"semana-3"},
+ "conteudo":{code:"PDF",t:"Playbook de Produção de Conteúdo",tipo:"pdf",id:"1m-osVl7-OvlpVck2v4EbeWcjYDLU2l4X",
+   d:"Parte 1: perfil que converte (Método PIP: foto, bio, destaques, fixados, identidade visual). Parte 2: produção com o framework A-C-T-AU, roteiros prontos, grade semanal, rotina de gravação e scorecard.",
+   uso:"Semana 2 · Dia 10, e depois todo dia", rota:"semana-2"},
+ "apresentacao":{code:"PDF",t:"Playbook de Apresentação High Ticket",tipo:"pdf",id:"1CdUUvFO4XiKZDvp-Q1POIeATw_9_NjXN",
+   d:"Como montar a apresentação que você mostra no fim da reunião de venda.",
+   uso:"Semana 4 · Dia 20", rota:"semana-4"}
+};
+const docUrl=x=>x.tipo==="doc"?`https://docs.google.com/document/d/${x.id}/edit`:`https://drive.google.com/file/d/${x.id}/view`;
+const copyUrl=x=>`https://docs.google.com/document/d/${x.id}/copy`;
+function docCard(k,showUso){
+ const x=D[k];
+ const acts = x.tipo==="doc"
+  ? `<a class="btn primary" href="${copyUrl(x)}" target="_blank" rel="noopener">Fazer minha cópia</a><a class="btn" href="${docUrl(x)}" target="_blank" rel="noopener">Ver o modelo</a>`
+  : `<a class="btn primary" href="${docUrl(x)}" target="_blank" rel="noopener">Abrir o PDF</a>`;
+ return `<div class="doc"><span class="doc-code${x.tipo==="pdf"?" pdf":""}">${x.code}</span><div class="doc-main">${showUso?`<span class="doc-meta">${x.uso}</span>`:""}<span class="doc-t">${x.t}</span><span class="doc-d">${x.d}</span><div class="doc-actions">${acts}</div></div></div>`;
+}
+
+const SK=[
+ ["/narrativa-especialista","Monta o seu documento de narrativa: história, virada, crenças e autoridade.","Semana 1"],
+ ["/promessa-biografia","Gera 5 versões de promessa e 5 de biografia a partir do [00] Posicionamento.","Semana 1 · Dia 6"],
+ ["/pip-instagram","Entrega bio, destaques story a story e os 3 fixados prontos.","Semana 2 · Playbook de Conteúdo"],
+ ["/social-media-cronograma","Monta o cronograma de posts com roteiros, capas e legendas.","Quando for produzir conteúdo"],
+ ["/apresentacao-high-ticket","Monta a apresentação de vendas de 15 slides no padrão M.Scale.","Semana 4 · Dia 20"],
+ ["/landing-page-alta-conversao","Cria uma página da oferta com botão para o WhatsApp.","Opcional"]
+];
+
+const W = [
+{
+ id:"semana-1", n:1, short:"Mercado e posicionamento", dias:"Dias 1 a 6",
+ goal:"Descobrir o que você faz de diferente dos seus concorrentes e transformar isso numa promessa clara. Sem isso, você vira \"mais um\" e a única forma de vender é baixando preço.",
+ tasks:[
+  {d:"Dias 1 e 2", t:"Pesquisar 5 concorrentes",
+   o:"Encontrar 5 concorrentes da sua área e analisar o Google, o Instagram e o site de cada um.",
+   c:`<ol>
+<li>Entre no Google e pesquise como o seu cliente pesquisaria. Exemplos: <b>"[seu serviço] + [sua cidade]"</b>, <b>"melhor [sua área]"</b>, <b>"como resolver [problema que você resolve]"</b>.</li>
+<li>Escolha 5 concorrentes: 3 que aparecem no topo e 2 que são referência no seu mercado (os que você admira ou que todo mundo cita).</li>
+<li>Para cada um, abra o Instagram, o site ou página de vendas e as avaliações no Google.</li>
+<li>Preencha uma linha da tabela abaixo para cada concorrente, numa planilha ou no caderno.</li>
+</ol>
+<div class="tbl-wrap"><table><thead><tr><th>O que anotar</th><th>Onde encontrar</th></tr></thead><tbody>
+<tr><td><b>Nome e link</b></td><td>Google</td></tr>
+<tr><td><b>Para quem ele vende</b></td><td>Bio do Instagram e topo do site</td></tr>
+<tr><td><b>O que ele promete</b></td><td>Bio, título do site, anúncios</td></tr>
+<tr><td><b>Produtos e preços</b></td><td>Site, destaques, ou pergunte no direct como cliente</td></tr>
+<tr><td><b>Como ele capta cliente</b></td><td>Tem anúncio? Posta conteúdo? Aparece no Google? Usa WhatsApp?</td></tr>
+<tr><td><b>O que os clientes elogiam</b></td><td>Avaliações do Google, comentários do Instagram</td></tr>
+<tr><td><b>O que os clientes reclamam</b></td><td>Avaliações de 1 a 3 estrelas, Reclame Aqui, comentários</td></tr>
+</tbody></table></div>
+<div class="tip"><b>Dica:</b> as reclamações dos clientes dos concorrentes são ouro. Tudo que eles reclamam é uma oportunidade de você fazer diferente.</div>`},
+  {d:"Dia 3", t:"Comparar e achar as lacunas",
+   o:"Olhar os 5 concorrentes lado a lado e anotar o que se repete e o que ninguém faz.",
+   c:`<ol>
+<li>Marque o que <b>todos</b> prometem e fazem igual. Isso é o básico do mercado: você precisa ter, mas não te diferencia.</li>
+<li>Marque o que <b>ninguém</b> está fazendo ou falando. Exemplo: ninguém atende um público específico, ninguém dá garantia, ninguém acompanha depois da venda.</li>
+<li>Liste as 3 maiores reclamações que se repetem entre os clientes deles.</li>
+</ol>`},
+  {d:"Dia 4", t:"Análise SWOT",
+   o:"Olhar para a sua empresa e responder com honestidade quais são as suas forças, fraquezas, oportunidades e ameaças.",
+   c:`<p>Desenhe 4 quadrados numa folha e responda as perguntas de cada um. Mínimo de 3 itens por quadrado.</p>
+<div class="swot">
+<div><b>FORÇAS</b>O que você faz melhor que os 5 concorrentes? Qual experiência, resultado ou história só você tem? Por que as pessoas te procuram hoje?</div>
+<div><b>FRAQUEZAS</b>O que você ainda não tem (audiência, cases, estrutura, tempo)? Onde os concorrentes estão na sua frente?</div>
+<div><b>OPORTUNIDADES</b>As lacunas e reclamações do dia 3. Que público está mal atendido? Que mudança no mercado te favorece?</div>
+<div><b>AMEAÇAS</b>Concorrente grande, guerra de preço, cliente desconfiado, mudança de lei ou tecnologia.</div>
+</div>
+<div class="quote"><span class="q-l">Feche o dia com esta frase</span>"O que eu tenho de diferente é …" Essa frase é a base de tudo que vem depois.</div>`,
+   ia:"Cole no Claude a tabela dos concorrentes e a sua SWOT e peça: \"com base nisso, me dê 3 ângulos de diferenciação possíveis para o meu negócio\"."},
+  {d:"Dia 5", t:"Documento de posicionamento",
+   o:"Fazer a sua cópia do [00] Posicionamento e responder todos os blocos.", docs:["00"],
+   c:`<p>Use as respostas da SWOT e as lacunas do dia 3. Não responda no genérico ("atendimento de qualidade", "compromisso com o cliente"): <b>se o concorrente pode dizer a mesma frase, ela não serve.</b> Escreva como você explicaria para um amigo numa conversa.</p>`},
+  {d:"Dia 6", t:"Definir a promessa",
+   o:"Escrever a sua promessa: a frase que diz o que o cliente ganha trabalhando com você.",
+   c:`<div class="quote"><span class="q-l">Estrutura</span>Eu ajudo <b>[quem]</b> a <b>[resultado concreto]</b> em <b>[prazo ou forma]</b> sem <b>[o que ele mais teme ou odeia]</b>.</div>
+<ol>
+<li>Escreva 3 versões diferentes.</li>
+<li>Mande as 3 para 3 pessoas que seriam seus clientes e pergunte: "qual dessas te faria querer saber mais?"</li>
+<li>Fique com a mais escolhida.</li>
+</ol>`,
+   ia:"A skill promessa-biografia gera 5 versões a partir do seu [00] Posicionamento. O Bloco 5 do documento é onde a promessa escolhida fica registrada.", docs:["00"]}
+ ],
+ deliv:"Tabela dos 5 concorrentes, SWOT, frase \"o que eu tenho de diferente\", documento de posicionamento preenchido e promessa escolhida.",
+ checks:["5 concorrentes pesquisados (Google, Instagram e site)","Tabela de concorrentes preenchida","Lacunas e reclamações anotadas","SWOT com no mínimo 3 itens por quadrado","Frase \"o que eu tenho de diferente\"","Documento de posicionamento preenchido","Promessa escolhida e testada com 3 pessoas"]
+},
+{
+ id:"semana-2", n:2, short:"Cliente e oferta", dias:"Dias 7 a 12",
+ goal:"Entender a fundo quem compra de você, o caminho que essa pessoa faz até comprar, e montar a oferta certa para ela. É daqui que saem as estratégias de aquisição por canal.",
+ tasks:[
+  {d:"Dia 7", t:"Público-alvo e produtos",
+   o:"Fazer a sua cópia do [01] Público-alvo, preencher e anotar todos os seus produtos.", docs:["01"],
+   c:`<ol>
+<li>No [01] Público-alvo, pense em um cliente real que você já atendeu (ou gostaria de atender) e descreva ele. Pessoa real responde melhor que "homens e mulheres de 25 a 45 anos".</li>
+<li>Liste todos os produtos ou serviços que você tem ou consegue entregar hoje:</li>
+</ol>
+<div class="tbl-wrap"><table><thead><tr><th>Produto</th><th>Tipo</th><th>O que entrega</th><th>Preço</th><th>Já vendeu?</th></tr></thead><tbody>
+<tr><td><b>Exemplo: diagnóstico</b></td><td>Consultoria</td><td>1 reunião de 2h + relatório</td><td>R$ 500</td><td>Sim, 3 vezes</td></tr>
+</tbody></table></div>
+<p style="font-size:13px;color:var(--muted)">Tipos: serviço, consultoria, mentoria, curso, produto físico.</p>`},
+  {d:"Dia 8", t:"Canvas do cliente",
+   o:"Montar o canvas do cliente, ou seja, entrar na cabeça dele.",
+   c:`<p>Antes de preencher, converse com <b>3 a 5 pessoas do seu público</b> (WhatsApp ou ligação de 15 minutos). Anote as palavras exatas que elas usam. Depois responda:</p>
+<ul>
+<li><b>O que ele pensa:</b> o que passa na cabeça dele sobre o problema? Que dúvidas e medos tem? ("Será que vale o investimento?", "já tentei e não deu certo")</li>
+<li><b>O que ele sente:</b> frustração, vergonha, ansiedade, cansaço? O que tira o sono dele?</li>
+<li><b>O que ele vê:</b> o que acontece ao redor dele? O que concorrentes, amigos e o mercado mostram?</li>
+<li><b>O que ele escuta:</b> o que família, amigos, chefe, sócio e influenciadores falam sobre esse assunto?</li>
+<li><b>Dores:</b> o que ele quer parar de sentir ou de perder?</li>
+<li><b>Desejos:</b> o que ele quer conquistar? Como seria a vida dele com o problema resolvido?</li>
+</ul>`,
+   ia:"Cole as anotações das conversas no Claude e peça para organizar no canvas. Depois revise: tem que soar como o seu cliente fala."},
+  {d:"Dia 9", t:"Jornada do cliente",
+   o:"Desenhar o caminho que o cliente faz antes de comprar de você.",
+   c:`<p>Responda, etapa por etapa, o que ele faz e onde ele está:</p>
+<ol>
+<li><b>Percebe o problema:</b> o que acontece que faz ele perceber que precisa de ajuda?</li>
+<li><b>Procura solução:</b> onde procura? Google, Instagram, YouTube, pergunta para um amigo?</li>
+<li><b>Compara opções:</b> o que olha para decidir? Preço, avaliações, resultados de outros clientes, indicação?</li>
+<li><b>Faz contato:</b> como chega até você? WhatsApp, ligação, formulário, direct?</li>
+<li><b>Decide e compra:</b> o que precisa acontecer na conversa para ele fechar? O que faz ele desistir?</li>
+</ol>
+<div class="tip"><b>Exemplo:</b> o cliente pesquisa no Google, encontra seu perfil, olha as avaliações e manda mensagem no WhatsApp. Nesse caso, Google e WhatsApp são os seus canais principais.</div>`},
+  {d:"Dia 10", t:"Estratégia por canal de aquisição",
+   o:"Escolher de 1 a 2 canais principais, baseado na jornada, e decidir se você precisa produzir conteúdo.",
+   c:`<p>Olhe a jornada e veja onde o seu cliente procura e decide. <b>Comece pelo canal mais rápido de gerar conversa</b>, não pelo que você acha mais bonito.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Canal</th><th>Quando faz sentido</th><th>Primeiro passo</th></tr></thead><tbody>
+<tr><td><b>Indicação e rede de contatos</b></td><td>Sempre. É o mais rápido para a primeira venda</td><td>Lista de contatos da Semana 3</td></tr>
+<tr><td><b>Prospecção ativa</b> (WhatsApp, direct, LinkedIn)</td><td>Quando você sabe exatamente quem é o cliente</td><td>Mensagem de abordagem</td></tr>
+<tr><td><b>Google</b> (perfil da empresa, site)</td><td>Quando o cliente pesquisa no Google antes de comprar</td><td>Criar ou ajustar o perfil e pedir avaliações</td></tr>
+<tr><td><b>Instagram e conteúdo</b></td><td>Quando o cliente precisa confiar e acompanhar antes</td><td>Ajustar o perfil e definir os temas</td></tr>
+<tr><td><b>Parcerias</b></td><td>Quando outro negócio já atende o seu cliente</td><td>Listar 5 parceiros possíveis</td></tr>
+</tbody></table></div>
+<div class="blk-l m" style="padding-top:4px">Precisa produzir conteúdo agora?</div>
+<ul>
+<li>Seu cliente compra por indicação ou pesquisa no Google e chama na hora? Então <b>conteúdo não é prioridade</b> neste mês. Basta o perfil arrumado com prova (depoimentos, resultados, bastidores).</li>
+<li>Seu cliente segue, acompanha e compara antes de comprar? Então <b>você precisa de conteúdo</b>. Comece com 3 posts por semana sobre as dores do canvas e siga o Playbook de Produção de Conteúdo: primeiro arrume o perfil (Parte 1), depois produza com o A-C-T-AU (Parte 2).</li>
+</ul>`, docs:["conteudo"]},
+  {d:"Dias 11 e 12", t:"Montar a oferta",
+   o:"Montar o produto e a oferta preenchendo a sua cópia do [03] Ofertas.", docs:["03"],
+   c:`<p>A oferta precisa responder:</p>
+<ol>
+<li><b>Para quem é</b> (e para quem não é).</li>
+<li><b>Qual resultado entrega:</b> a promessa da Semana 1.</li>
+<li><b>Como entrega:</b> formato, duração, encontros, materiais, suporte.</li>
+<li><b>Por que você é diferente:</b> o que saiu da SWOT.</li>
+<li><b>Quanto custa</b> e formas de pagamento.</li>
+<li><b>Bônus</b> que resolvem objeções (ex.: falta de tempo → modelos prontos).</li>
+<li><b>Garantia</b> que tira o risco do cliente.</li>
+</ol>
+<div class="tip"><b>Teste:</b> explique a oferta em voz alta em 1 minuto. Se não couber, ainda está confusa.</div>`}
+ ],
+ deliv:"Documento de público-alvo, tabela de produtos, canvas do cliente, jornada desenhada, canais escolhidos, decisão sobre conteúdo e oferta montada.",
+ checks:["Documento de público-alvo preenchido","Produtos listados na tabela","3 a 5 conversas com clientes","Canvas do cliente completo","Jornada do cliente desenhada","1 a 2 canais de aquisição escolhidos","Decisão: vai ou não produzir conteúdo","Oferta montada e explicada em 1 minuto"]
+},
+{
+ id:"semana-3", n:3, short:"Preparação comercial", dias:"Dias 13 a 18",
+ goal:"Aprender a conduzir uma venda, saber exatamente para quem ligar e começar as primeiras abordagens. Meta: terminar a semana com pelo menos 3 reuniões agendadas.",
+ tasks:[
+  {d:"Dia 13", t:"Aula do Leandro sobre vendas",
+   o:"Assistir a aula do Leandro sobre vendas.",
+   c:`<p>Assista com caderno do lado. Anote os <b>5 aprendizados mais importantes</b> e, ao lado de cada um, escreva como você vai aplicar isso no seu negócio. Assistir sem anotar não conta.</p>`},
+  {d:"Dia 14", t:"Módulo da metodologia na área de membros",
+   o:"Estudar o módulo da metodologia completa na área de membros.",
+   c:`<p>Mesma regra: para cada aula, anote <b>1 ação prática</b>. Traga para o encontro as dúvidas que surgirem.</p>`},
+  {d:"Dia 15", t:"Lista de contatos em 3 grupos",
+   o:"Listar no mínimo 50 contatos (o ideal é 100) e separar em 3 grupos: quem compra de mim, quem me indica e quem abre minhas portas.",
+   c:`<ol>
+<li>Abra o WhatsApp, o Instagram, o LinkedIn e a agenda do celular. Passe por todos os contatos. Inclua ex-clientes, ex-colegas, fornecedores, amigos, família, pessoas de grupos e comunidades.</li>
+<li>Não julgue ainda se a pessoa vai comprar. Só anote.</li>
+<li>Classifique cada contato em um dos 3 grupos:</li>
+</ol>
+<div class="tbl-wrap"><table><thead><tr><th>Grupo</th><th>Quem é</th><th>Exemplo</th></tr></thead><tbody>
+<tr><td><b>Quem compra de mim</b></td><td>Tem o problema que você resolve e pode pagar</td><td>Ex-cliente, alguém que já te pediu ajuda</td></tr>
+<tr><td><b>Quem me indica</b></td><td>Conhece quem tem o problema</td><td>Amigo bem relacionado, ex-colega, cliente satisfeito</td></tr>
+<tr><td><b>Quem abre minhas portas</b></td><td>Tem acesso a muitos clientes seus</td><td>Negócio parceiro, líder de comunidade, associação</td></tr>
+</tbody></table></div>
+<div class="tip"><b>Planilha:</b> nome, telefone, grupo, temperatura (quente, morno, frio), data do contato, status, próximo passo.</div>`},
+  {d:"Dia 16", t:"Mensagens de abordagem",
+   o:"Escrever uma mensagem para cada grupo.",
+   c:`<p>Mensagem curta, pessoal e <b>sem pitch de venda</b>. Use o nome da pessoa e algo que vocês têm em comum. Modelos para adaptar:</p>
+<div class="quote"><span class="q-l">Quem compra de mim</span>"Oi [nome], tudo bem? Lembrei de você porque estou ajudando [público] a [resultado da promessa]. Você ainda passa por [dor]? Se fizer sentido, te explico rapidinho como funciona."</div>
+<div class="quote"><span class="q-l">Quem me indica</span>"Oi [nome], tudo bem? Comecei um projeto novo ajudando [público] a [resultado]. Você conhece alguém que está passando por [dor]? Me ajudaria muito."</div>
+<div class="quote"><span class="q-l">Quem abre minhas portas</span>"Oi [nome], tudo bem? Vi que você trabalha com [público]. Eu ajudo esse mesmo público a [resultado]. Acho que dá pra gente gerar valor junto. Topa um café de 20 minutos essa semana?"</div>`,
+   ia:"Peça ao Claude para adaptar os 3 modelos com a sua promessa e o seu jeito de falar.", docs:["04"], extra:`<div class="tip"><b>No [04] Funil</b> tem o script da <b>1ª Venda</b>: uma mensagem em tom de amigo para mandar para toda a sua lista de uma vez (pode ser lista de transmissão). Use junto com as mensagens individuais acima.</div>`},
+  {d:"Dias 17 e 18", t:"Primeiras abordagens",
+   o:"Começar a mandar as mensagens. Meta: 20 contatos por dia.",
+   c:`<ol>
+<li>Comece pelos <b>quentes</b> do grupo "quem compra de mim". São os mais rápidos de converter.</li>
+<li>Mande áudio ou texto, do jeito que você já falaria com essa pessoa.</li>
+<li>Respondeu com interesse? Convide para uma conversa: <b>"Que tal a gente marcar 30 minutos para eu entender melhor sua situação? Terça ou quinta fica melhor?"</b> Sempre ofereça 2 opções de dia.</li>
+<li>Atualize a planilha no fim de cada dia.</li>
+</ol>`}
+ ],
+ deliv:"Anotações da aula e do módulo, planilha com os contatos nos 3 grupos, 3 mensagens prontas, quantas abordagens fez e quantas reuniões agendou.",
+ checks:["Aula do Leandro assistida com 5 aprendizados anotados","Módulo da metodologia estudado","Mínimo de 50 contatos listados (ideal: 100)","Contatos separados em: quem compra, quem indica, quem abre portas","3 mensagens de abordagem prontas","40 abordagens feitas","Pelo menos 3 reuniões agendadas"]
+},
+{
+ id:"semana-4", n:4, short:"Prospecção e vendas", dias:"Dias 19 a 24",
+ goal:"Transformar contatos em reuniões e reuniões em vendas. Meta: 5 reuniões feitas e a primeira venda fechada.",
+ tasks:[
+  {d:"Dia 19", t:"Roteiro da reunião de venda",
+   o:"Preparar o roteiro da conversa de venda, usando o que você aprendeu na aula do Leandro.",
+   c:`<p>A reunião tem 30 a 45 minutos e segue esta ordem:</p>
+<ol>
+<li><b>Conexão (5 min):</b> conversa leve, quebra o gelo, agradece o tempo.</li>
+<li><b>Diagnóstico (15 min):</b> você pergunta e ele fala. "Qual é a situação hoje?", "O que já tentou?", "Quanto isso está te custando?", "Se resolvesse, o que mudaria?" Use o canvas do cliente para saber o que perguntar.</li>
+<li><b>Resumo (2 min):</b> repita a dor com as palavras dele. "Então, se eu entendi bem, hoje você…" Ele precisa responder "é isso".</li>
+<li><b>Solução (10 min):</b> apresente a oferta conectando cada parte a uma dor que ele falou.</li>
+<li><b>Fechamento (5 min):</b> preço, formas de pagamento, e a pergunta: "faz sentido começarmos?"</li>
+</ol>
+<div class="tip"><b>Escreva a resposta para as 5 objeções mais comuns:</b> "está caro", "vou pensar", "preciso falar com meu sócio ou cônjuge", "não tenho tempo agora", "não sei se funciona pra mim".</div>`,
+   ia:"Peça ao Claude para fazer o papel do seu cliente e treine a reunião 2 vezes antes da primeira de verdade."},
+  {d:"Dia 20", t:"Proposta e pagamento prontos",
+   o:"Deixar pronto tudo que o cliente precisa para dizer sim na hora.",
+   c:`<ul>
+<li>Proposta de 1 página (ou apresentação curta)</li>
+<li>Link de pagamento com parcelamento</li>
+<li>Contrato simples</li>
+<li>Mensagem de boas-vindas</li>
+</ul>
+<div class="tip">Se o cliente disser sim e você não tiver como cobrar, a venda esfria.</div>`,
+   ia:"A skill apresentacao-high-ticket monta a apresentação da oferta.", docs:["apresentacao"]},
+  {d:"Dias 21 a 23", t:"Prospecção e reuniões",
+   o:"Fazer as reuniões agendadas e continuar prospectando todos os dias.",
+   c:`<ol>
+<li>Mantenha <b>20 abordagens por dia</b>. Reunião agendada não é motivo para parar de prospectar.</li>
+<li>Agora ative o grupo <b>"quem me indica"</b> e o grupo <b>"quem abre minhas portas"</b>. Convide os de "abre portas" para um café ou uma ligação.</li>
+<li>Faça as reuniões seguindo o roteiro. Feche na reunião. Se a pessoa não fechar, marque o retorno com dia e hora. Nunca deixe no "depois a gente se fala".</li>
+<li><b>No fim de toda conversa, comprou ou não, peça indicação:</b> "Você conhece mais alguém que passa por isso?"</li>
+<li>Depois de cada reunião, anote na planilha onde a pessoa esfriou e qual objeção apareceu.</li>
+</ol>`},
+  {d:"Dia 24", t:"Follow-up e balanço do mês",
+   o:"Fazer o follow-up de quem ficou de pensar e fechar os números do mês.",
+   c:`<p>Mande uma mensagem curta para cada "vou pensar", retomando algo que a própria pessoa falou na reunião.</p>
+<div class="quote"><span class="q-l">Modelo</span>"Oi [nome], fiquei pensando no que você me disse sobre [dor]. Conseguiu ver com calma? Posso tirar alguma dúvida?"</div>
+<p>Depois preencha a página de <a href="#metricas">Métricas</a>.</p>`}
+ ],
+ deliv:"Roteiro da reunião, respostas às objeções, quantas reuniões fez, quantas vendas fechou, principais objeções ouvidas e as métricas preenchidas.",
+ checks:["Roteiro da reunião pronto","Respostas às 5 objeções","2 treinos de reunião feitos","Proposta, link de pagamento e contrato prontos","20 abordagens por dia mantidas","Grupos \"quem indica\" e \"quem abre portas\" ativados","Indicação pedida em todas as conversas","Follow-up feito com todos os \"vou pensar\"","Primeira venda fechada"]
+}];
+
+const M = [
+ ["Contatos listados","50 a 100","Voltar à agenda, WhatsApp e redes"],
+ ["Abordagens feitas","100","Disciplina: 20 por dia"],
+ ["Taxa de resposta","30%","Mensagem de abordagem"],
+ ["Reuniões agendadas","5","Convite para a reunião e promessa"],
+ ["Comparecimento","70% das agendadas","Confirmação e lembrete na véspera"],
+ ["Indicações recebidas","5","Pedir indicação em toda conversa"],
+ ["Vendas fechadas","1 ou mais","Roteiro, oferta e respostas às objeções"]
+];
+
+/* Estado local do mentorado (só no navegador dele) */
+const KEY="mscale-iniciante-v1";
+let S={checks:{},metrics:{},nome:""};
+try{const raw=localStorage.getItem(KEY); if(raw) S=Object.assign(S,JSON.parse(raw));}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function weekPct(w){const t=w.checks.length;let d=0;w.checks.forEach((_,i)=>{if(S.checks[w.id+"-"+i])d++});return {d,t,p:Math.round(d/t*100)}}
+function totalPct(){let d=0,t=0;W.forEach(w=>{const r=weekPct(w);d+=r.d;t+=r.t});return Math.round(d/t*100)}
+
+/* Fases MScale */
+const FASES={
+ fundacao:{n:"Fase 1",t:"Fundação",d:"Para quem está começando o projeto agora: ainda não vende ou vende sem oferta definida.",g:"Meta: posicionamento, oferta e a primeira venda."},
+ tracao:{n:"Fase 2",t:"Tração",d:"Para quem já vende, mas depende de indicação e não sabe quanto vai vender no mês que vem.",g:"Meta: canal de aquisição e vendas todo mês."},
+ escala:{n:"Fase 3",t:"Escala",d:"Para quem já vende com previsibilidade e precisa crescer sem depender só de si.",g:"Meta: time, processo e aumento de faturamento."}
+};
+/* Diagnóstico: cada opção soma pontos; 0 a 4 Fundação, 5 a 8 Tração, 9+ Escala */
+const QS=[
+ {id:"venda",t:"Você já vendeu o seu serviço, mentoria ou produto?",o:[["Ainda não vendi",0],["Já vendi algumas vezes, sem constância",1],["Vendo todo mês",2]]},
+ {id:"fat",t:"Quanto você fatura por mês com isso, em média?",o:[["Ainda nada",0],["Até R$ 10 mil",1],["De R$ 10 mil a R$ 50 mil",2],["Acima de R$ 50 mil",3]]},
+ {id:"oferta",t:"Você tem uma oferta definida, com preço e entregáveis?",o:[["Ainda não",0],["Tenho, mas não testei",1],["Sim, e já validei vendendo",2]]},
+ {id:"pos",t:"Você consegue explicar em uma frase para quem você vende e o que entrega?",o:[["Não sei explicar",0],["Mais ou menos",1],["Sim, com clareza",2]]},
+ {id:"canal",t:"De onde vêm os seus clientes hoje?",o:[["Ainda não tenho clientes",0],["Indicação e conhecidos",1],["Tenho um canal previsível (conteúdo, anúncio ou prospecção)",2]]},
+ {id:"time",t:"Quem trabalha no negócio com você?",o:[["Faço tudo sozinho",0],["Tenho 1 pessoa ajudando",1],["Tenho um time",2]]}
+];
+function diag(){
+ const a=S.diag||{};let sum=0,n=0;
+ QS.forEach(q=>{if(a[q.id]!==undefined){n++;sum+=q.o[a[q.id]][1]}});
+ if(n<QS.length) return {done:false,n};
+ let f=sum<=4?"fundacao":sum<=8?"tracao":"escala";
+ if(a.venda===0) f="fundacao";
+ return {done:true,n,f,sum};
+}
+
+const START="boas-vindas";
+const routes=[
+ {id:"boas-vindas",ic:"★",t:"Boas-vindas",g:"Comece aqui"},
+ {id:"visao",ic:"◆",t:"Visão geral",g:"Fase Fundação · 30 dias"},
+ ...W.map(w=>({id:w.id,ic:w.n,t:w.short,w,g:"Fase Fundação · 30 dias"})),
+ {id:"metricas",ic:"%",t:"Métricas",g:"Fase Fundação · 30 dias"},
+ {id:"materiais",ic:"↗",t:"Materiais",g:"Ferramentas"}
+];
+
+function renderNav(cur){
+ let lastG="";
+ document.getElementById("nav").innerHTML=routes.map(r=>{
+  let pct="",lab="";
+  if(r.g!==lastG){lab=`<div class="nav-label"${lastG?' style="padding-top:14px"':""}>${r.g}</div>`;lastG=r.g}
+  if(r.w){const p=weekPct(r.w);pct=`<span class="nav-pct${p.p===100?" done":""}">${p.p===100?"✓":p.p+"%"}</span>`}
+  return lab+`<a href="#${r.id}" class="${r.id===cur?"active":""}"${r.id===cur?' aria-current="page"':""}><span class="nav-ic">${r.ic}</span><span class="nav-t">${r.t}</span>${pct}</a>`;
+ }).join("");
+ const tp=totalPct();
+ document.getElementById("totPct").textContent=tp+"%";
+ document.getElementById("totBar").style.width=tp+"%";
+}
+
+function nomeField(){
+ return `<div class="who-m"><label for="nome-m">Plano de ação de</label><input id="nome-m" type="text" placeholder="Seu nome" autocomplete="off" value="${esc(S.nome)}"></div>`;
+}
+function hello(){return S.nome?`${esc(S.nome.split(" ")[0])}, `:""}
+
+function pager(i){
+ const prev=routes[i-1],next=routes[i+1];
+ return `<div class="pager">${prev?`<a href="#${prev.id}"><small>Anterior</small>${prev.t}</a>`:""}${next?`<a class="next" href="#${next.id}"><small>Próximo</small>${next.t}</a>`:""}</div>`;
+}
+
+function renderBoas(){
+ const r=diag();const a=S.diag||{};
+ const res = r.done ? `<div class="result" id="resultado">
+   <span class="eyebrow">Sua trilha recomendada</span>
+   <h2>Fase ${FASES[r.f].t}</h2>
+   <p>${FASES[r.f].d} ${FASES[r.f].g}</p>
+   ${trailHTML()}
+   <p>Essa trilha é a recomendação inicial. <b>No kick-off a gente confirma a fase e ajusta a ordem</b> olhando o seu negócio de perto. Leve estas respostas para a conversa.</p>
+   <div class="result-acts">
+    <button class="btn primary" type="button" id="copyBtn">Copiar minhas respostas</button>
+    ${r.f==="fundacao"?`<a class="btn" href="#semana-1">Começar pela Semana 1</a>`:""}
+   </div>
+   <span class="pend" id="copyMsg" style="color:#555" aria-live="polite"></span>
+  </div>` : `<p class="pend">Responda as ${QS.length} perguntas para ver o seu ponto de partida. Faltam ${QS.length-r.n}.</p>`;
+ return `${nomeField()}
+ <div class="crumb">MScale · <b>Boas-vindas</b></div>
+ <h1>${S.nome?`${esc(S.nome.split(" ")[0])}, bem-vindo`:"Bem-vindo"} ao <em>MScale</em></h1>
+ <p class="lead">Aqui fica o seu plano de ação. Em vez de um documento solto, você tem o passo a passo de cada semana, os materiais para preencher e o acompanhamento do seu progresso num lugar só.</p>
+ <div class="card">
+  <h2>Como aproveitar a plataforma</h2>
+  <ol class="steps">
+   <li><span class="sn">PASSO 1</span><b>Coloque o seu nome</b><span>No campo "Plano de ação de", no menu. A plataforma passa a falar com você.</span></li>
+   <li><span class="sn">PASSO 2</span><b>Responda o diagnóstico</b><span>São ${QS.length} perguntas aqui embaixo. Leva 2 minutos e mostra o seu ponto de partida.</span></li>
+   <li><span class="sn">PASSO 3</span><b>Confirme a fase no kick-off</b><span>Na nossa conversa, a gente olha o seu negócio e define a sua fase e as suas prioridades.</span></li>
+   <li><span class="sn">PASSO 4</span><b>Siga uma semana por vez</b><span>Abra cada tarefa: tem o que fazer, como fazer e o material que você vai usar.</span></li>
+   <li><span class="sn">PASSO 5</span><b>Marque o checklist</b><span>O seu progresso aparece no menu. Abra sempre pelo mesmo aparelho para não perder as marcações.</span></li>
+   <li><span class="sn">PASSO 6</span><b>Leve o entregável para o encontro</b><span>Uma vez por semana a gente senta em grupo. Travou mais de 1 dia? Manda no grupo, não espera o encontro.</span></li>
+  </ol>
+ </div>
+ <h2>As 3 fases do MScale</h2>
+ <div class="phases">${Object.keys(FASES).map(k=>`<div class="phase${r.done&&r.f===k?" on":""}"><span class="ph-n">${FASES[k].n}</span><h3>${FASES[k].t}</h3><p>${FASES[k].d}</p><span class="ph-goal">${FASES[k].g}</span></div>`).join("")}</div>
+ <div class="card" id="diagnostico">
+  <h2>Diagnóstico de ponto de partida</h2>
+  <p style="color:var(--muted);font-size:14px">Responda com sinceridade. Não existe resposta certa: é isso que define por onde você começa.</p>
+  ${QS.map((q,qi)=>`<div class="q" role="radiogroup" aria-label="${esc(q.t)}"><div class="q-t"><small>${String(qi+1).padStart(2,"0")}</small>${q.t}</div><div class="opts">${q.o.map((o,oi)=>`<label class="opt"><input type="radio" name="q-${q.id}" id="q-${q.id}-${oi}" data-q="${q.id}" value="${oi}"${a[q.id]===oi?" checked":""}><span>${o[0]}</span></label>`).join("")}</div></div>`).join("")}
+  <div class="q"><label class="q-t" for="q-desafio"><small>${String(QS.length+1).padStart(2,"0")}</small>Qual é o seu maior desafio hoje? (opcional)</label><textarea id="q-desafio" placeholder="Escreva do seu jeito">${esc(S.desafio||"")}</textarea></div>
+ </div>
+ <div id="resBox">${res}</div>
+ ${pager(0)}`;
+}
+/* Trilha recomendada: monta os passos a partir das respostas */
+function trilha(){
+ const r=diag();if(!r.done)return [];
+ const a=S.diag;const T=[];
+ if(r.f==="fundacao"){
+  W.forEach(w=>T.push({t:`Semana ${w.n} · ${w.short}`,d:w.goal.split(". ")[0]+".",h:"#"+w.id}));
+  T.push({t:"Métricas do mês",d:"Acompanhe os números e leve para o encontro semanal.",h:"#metricas"});
+  return T;
+ }
+ if(a.pos<2) T.push({t:"Revisar posicionamento e promessa",d:"Sua frase de posicionamento ainda não está clara. Refaça a SWOT e o [00] Posicionamento.",h:"#semana-1"});
+ if(a.oferta<2) T.push({t:"Validar a oferta",d:"Revise a oferta no [03] Ofertas e teste com clientes reais.",h:"#semana-2"});
+ if(r.f==="tracao"){
+  T.push({t:"Escolher o canal principal de aquisição",d:"Sair da dependência de indicação: 1 canal, com rotina e meta.",h:"#semana-2"});
+  T.push({t:"Rotina diária de prospecção e reuniões",d:"20 abordagens por dia, roteiro de reunião e follow-up.",h:"#semana-4"});
+  T.push({t:"Conteúdo que gera demanda",d:"Perfil que converte (PIP) e produção com o A-C-T-AU.",h:"#materiais"});
+  T.push({t:"Meta mensal e funil de vendas",d:"Saber quantas abordagens, reuniões e vendas você precisa por mês.",h:"#metricas"});
+  T.push({t:"Plano de vendas recorrentes",d:"Previsibilidade mês a mês, montado com você."});
+ } else {
+  T.push({t:"Mapear os gargalos do funil",d:"Onde a venda trava hoje: abordagem, reunião ou fechamento.",h:"#metricas"});
+  T.push({t:"Time comercial",d:"Quem prospecta, quem fecha e como treinar."});
+  T.push({t:"Processos e gestão semanal",d:"Rotina, indicadores e o que sai das suas mãos primeiro."});
+  T.push({t:"Ticket e esteira de produtos",d:"Aumentar o valor por cliente e criar a próxima oferta."});
+  T.push({t:"Canal de escala",d:"Conteúdo e anúncios para crescer além da sua rede.",h:"#materiais"});
+ }
+ return T;
+}
+function trailHTML(){
+ return `<ol class="trail">${trilha().map(x=>`<li><span class="tr-main"><b>${x.t}</b><span>${x.d}</span></span>${x.h?`<a class="tr-go" href="${x.h}">Abrir</a>`:`<span class="tr-kick">No kick-off</span>`}</li>`).join("")}</ol>`;
+}
+
+function copyText(){
+ const r=diag();const a=S.diag||{};
+ return `Diagnóstico MScale${S.nome?" — "+S.nome:""}\n`+QS.map(q=>`• ${q.t} ${a[q.id]!==undefined?q.o[a[q.id]][0]:"—"}`).join("\n")+(S.desafio?`\n• Maior desafio: ${S.desafio}`:"")+(r.done?`\nTrilha recomendada: Fase ${FASES[r.f].t}\n`+trilha().map((x,i)=>`${i+1}. ${x.t}`).join("\n"):"");
+}
+
+function trailBanner(){
+ const r=diag();
+ if(!r.done) return `<div class="trail-banner"><span>Ainda não fez o diagnóstico? Ele mostra a <b>sua trilha recomendada</b>.</span><a class="btn primary" href="#boas-vindas">Fazer o diagnóstico</a></div>`;
+ return `<div class="trail-banner"><span>Sua trilha recomendada: <b>Fase ${FASES[r.f].t}</b> · ${trilha().length} passos</span><a class="btn" href="#boas-vindas">Ver a trilha</a></div>`;
+}
+
+function renderVisao(){
+ return `${nomeField()}
+ ${trailBanner()}
+ <div class="crumb">Fase Fundação · <b>Visão geral</b></div>
+ <h1>${hello()}seu plano de ação de <em>30 dias</em></h1>
+ <p class="lead">Este é o seu passo a passo para sair do zero. Cada semana tem um objetivo, as tarefas de cada dia e o como fazer de cada uma. Siga na ordem e marque o que for concluindo.</p>
+ <div class="goal"><span class="eyebrow">Objetivo do mês</span><p>Em 30 dias, você sai do zero com posicionamento claro, oferta montada e a primeira venda feita.</p></div>
+ <p>O mês segue uma ordem que não pode ser pulada: primeiro você entende o mercado, depois entende o cliente, depois monta a oferta, e só então vai vender.</p>
+ <div class="weeks">${W.map(w=>{const p=weekPct(w);return `<a class="wk" href="#${w.id}"><div class="wk-n">Semana ${w.n}<span>${p.d}/${p.t}</span></div><h3>${w.short}</h3><p>${w.goal.split(". ")[0]}.</p><div class="bar"><i style="width:${p.p}%"></i></div></a>`}).join("")}</div>
+ <div class="card">
+  <h2>Como funciona</h2>
+  <ul class="rules">
+   <li><span class="n">1</span><span>Você executa as tarefas de <b>segunda a sábado</b>. Reserve de 1h30 a 2h por dia na agenda, como se fosse um compromisso com cliente.</span></li>
+   <li><span class="n">2</span><span><b>Uma vez por semana a gente senta em grupo.</b> Você mostra o que fez, o que deu certo e onde travou.</span></li>
+   <li><span class="n">3</span><span><b>Não pula etapa.</b> Se a semana não fechou, a gente ajusta no encontro e você termina antes de seguir. Vender sem posicionamento e sem oferta clara é queimar contato.</span></li>
+   <li><span class="n">4</span><span>Travou em alguma tarefa por mais de 1 dia? <b>Manda no grupo.</b> Não espera o encontro.</span></li>
+  </ul>
+ </div>
+ <a class="doc" href="#materiais" style="text-decoration:none;color:inherit"><span class="doc-code">↗</span><span class="doc-main"><span class="doc-t">Materiais e ferramentas</span><span class="doc-d">Todos os documentos ([00] Posicionamento, [01] Público-alvo, [03] Ofertas, [04] Funil), o Playbook de Conteúdo e as skills de IA num lugar só.</span></span></a>
+ <p class="foot">Seu progresso fica salvo neste navegador. Abra sempre pelo mesmo aparelho para manter as marcações.</p>
+ ${pager(1)}`;
+}
+
+function renderWeek(w,i){
+ const p=weekPct(w);
+ return `${nomeField()}
+ <div class="crumb">Fase Fundação · Semana ${w.n} · <b>${w.dias}</b></div>
+ <div class="weekhead"><h1>${w.short}</h1><span class="chip${p.p===100?" done":""}" id="wchip">${p.d} de ${p.t} concluídas</span></div>
+ <div class="goal"><span class="eyebrow">Objetivo da semana</span><p>${w.goal}</p></div>
+ <div class="tasks">${w.tasks.map((t,k)=>`
+  <details class="task"${k===0?" open":""}>
+   <summary><span class="day">${t.d}</span><span class="t-title">${t.t}</span><span class="caret" aria-hidden="true">›</span></summary>
+   <div class="t-body">
+    <div class="blk"><span class="blk-l m">O que fazer</span><p>${t.o}</p></div>
+    <div class="blk" style="padding-top:0"><span class="blk-l">Como fazer</span>${t.c}</div>
+    ${t.extra||""}
+    ${t.ia?`<div class="ai"><span class="ai-tag">IA</span><span>${t.ia}</span></div>`:""}
+    ${t.docs?`<div class="blk" style="padding-top:0"><span class="blk-l m">Material desta tarefa</span>${t.docs.map(k=>docCard(k)).join("")}</div>`:""}
+   </div>
+  </details>`).join("")}
+ </div>
+ <div class="deliv"><span class="eyebrow">Leve para o encontro em grupo</span><p>${w.deliv}</p></div>
+ <div class="card">
+  <h2>Checklist da semana ${w.n}</h2>
+  <ul class="checks">${w.checks.map((c,k)=>{const id=w.id+"-"+k;return `<li><label for="ck-${id}"><input type="checkbox" id="ck-${id}" data-k="${id}"${S.checks[id]?" checked":""}><span>${esc(c)}</span></label></li>`}).join("")}</ul>
+ </div>
+ ${pager(i)}`;
+}
+
+function renderMateriais(i){
+ return `${nomeField()}
+ <div class="crumb">MScale · <b>Materiais</b></div>
+ <h1>Materiais e ferramentas</h1>
+ <p class="lead">Tudo o que você precisa para executar o plano. Cada material também aparece dentro da tarefa em que ele é usado.</p>
+ <div class="tip"><b>Como usar os documentos:</b> clique em <b>Fazer minha cópia</b>. O Google cria um documento só seu, no seu Drive, para você preencher. Não escreva no modelo.</div>
+ <h2>Documentos para preencher</h2>
+ <div class="docs">${["00","01","03","04"].map(k=>docCard(k,true)).join("")}</div>
+ <h2>Playbooks de leitura</h2>
+ <div class="docs">${["conteudo","apresentacao"].map(k=>docCard(k,true)).join("")}</div>
+ <h2>Skills de IA</h2>
+ <p>Digite o comando no Claude e anexe os seus documentos preenchidos. A IA faz o rascunho; você ajusta com a sua voz.</p>
+ <div class="skills">${SK.map(s=>`<div class="skill"><code>${s[0]}</code><span>${s[1]}</span><small>${s[2]}</small></div>`).join("")}</div>
+ ${pager(i)}`;
+}
+
+function renderMetricas(i){
+ return `${nomeField()}
+ <div class="crumb">Fase Fundação · <b>Métricas</b></div>
+ <h1>Métricas do mês</h1>
+ <p class="lead">Os números mostram exatamente onde a venda está travando. Preencha toda semana a partir da Semana 3 e traga para o encontro. Se uma métrica fica abaixo da meta, o problema está na etapa da última coluna.</p>
+ <div class="tbl-wrap"><table><thead><tr><th>Métrica</th><th>Meta do mês</th><th>Seu resultado</th><th>Se ficar abaixo, revisar</th></tr></thead><tbody>
+ ${M.map((m,k)=>`<tr><td><b>${m[0]}</b></td><td style="font-variant-numeric:tabular-nums">${m[1]}</td><td><input class="metric-in" id="mt-${k}" data-m="${k}" type="text" inputmode="decimal" placeholder="—" value="${esc(S.metrics[k]||"")}" aria-label="Seu resultado: ${m[0]}"></td><td>${m[2]}</td></tr>`).join("")}
+ </tbody></table></div>
+ <div class="goal"><span class="eyebrow">Dias 25 a 30</span><p>Mantenha a rotina da Semana 4 (20 abordagens por dia, reuniões e follow-up) até o encontro de fechamento do mês.</p></div>
+ <div class="card">
+  <h2>E depois dos 30 dias?</h2>
+  <ul class="rules">
+   <li><span class="n">✓</span><span><b>Fechou a primeira venda:</b> você avança para a fase Tração.</span></li>
+   <li><span class="n">↻</span><span><b>Ainda não fechou:</b> repete as Semanas 3 e 4 com os ajustes do encontro, sem voltar para o início.</span></li>
+  </ul>
+ </div>
+ ${pager(i)}`;
+}
+
+function render(){
+ let id=(location.hash||"#"+START).slice(1);
+ let i=routes.findIndex(r=>r.id===id); if(i<0){i=0;id=routes[0].id}
+ const r=routes[i];
+ const page=document.getElementById("page");
+ page.innerHTML = r.id==="boas-vindas"?renderBoas(): r.id==="visao"?renderVisao(): r.id==="materiais"?renderMateriais(i): r.id==="metricas"?renderMetricas(i): renderWeek(r.w,i);
+ renderNav(id);
+ 
+}
+
+document.addEventListener("change",e=>{
+ const k=e.target.dataset&&e.target.dataset.k;
+ if(k!==undefined){S.checks[k]=e.target.checked;save();
+  const wid=k.replace(/-\d+$/,"");const w=W.find(x=>x.id===wid);
+  if(w){const p=weekPct(w);const ch=document.getElementById("wchip");if(ch){ch.textContent=`${p.d} de ${p.t} concluídas`;ch.classList.toggle("done",p.p===100)}}
+  renderNav((location.hash||"#"+START).slice(1));
+ }
+ const q=e.target.dataset&&e.target.dataset.q;
+ if(q!==undefined){S.diag=S.diag||{};S.diag[q]=Number(e.target.value);save();
+  const box=document.getElementById("resBox");
+  const was=diag().done;
+  const html=renderBoas();const tmp=document.createElement("div");tmp.innerHTML=html;
+  box.innerHTML=tmp.querySelector("#resBox").innerHTML;
+  const r=diag();document.querySelectorAll(".phase").forEach((el,k)=>el.classList.toggle("on",r.done&&Object.keys(FASES)[k]===r.f));
+ }
+});
+document.addEventListener("click",e=>{
+ if(e.target.id!=="copyBtn")return;
+ const txt=copyText();const msg=document.getElementById("copyMsg");
+ const fallback=()=>{msg.innerHTML='Selecione e copie o texto abaixo:<textarea id="copyOut" readonly></textarea>';const t=document.getElementById("copyOut");t.value=txt;t.focus();t.select();};
+ try{navigator.clipboard.writeText(txt).then(()=>{msg.textContent="Copiado. Cole no grupo ou leve para o kick-off.";},fallback)}catch(err){fallback()}
+});
+document.addEventListener("input",e=>{
+ if(e.target.dataset&&e.target.dataset.m!==undefined){S.metrics[e.target.dataset.m]=e.target.value;save()}
+ if(e.target.id==="q-desafio"){S.desafio=e.target.value;save()}
+ if(e.target.id==="nome"||e.target.id==="nome-m"){S.nome=e.target.value;save();
+  const other=document.getElementById(e.target.id==="nome"?"nome-m":"nome");if(other)other.value=S.nome;}
+});
+document.getElementById("nome").value=S.nome;
+window.addEventListener("hashchange",()=>{render();window.scrollTo(0,0)});
+render();
+</script>
+</body>
+</html>
